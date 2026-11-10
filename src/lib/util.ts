@@ -6,7 +6,7 @@ export function dateHTML(d: Date): string {
   return `${y}年<span class="tcy">${d.getUTCMonth() + 1}</span>月<span class="tcy">${d.getUTCDate()}</span>日`;
 }
 
-/** 帶 base 的站內連結，例如 url("2026-11-08") → /poem-webpage/2026-11-08/ */
+/** 帶 base 的站內連結，例如 url("2026-11-08") → /hangjian/2026-11-08/ */
 export function url(p = ""): string {
   const base = import.meta.env.BASE_URL.replace(/\/?$/, "/");
   return base + (p ? p.replace(/^\/|\/$/g, "") + "/" : "");
