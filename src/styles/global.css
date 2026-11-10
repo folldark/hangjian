@@ -70,8 +70,19 @@ a:focus-visible { outline: 2px solid var(--seal); outline-offset: 4px; border-ra
   letter-spacing: .35em;
   line-height: 1;
 }
-.tag { margin: 0; color: var(--ink-soft); letter-spacing: .12em; line-height: 1.9; }
-.tag .seal { margin-block-start: 1.4em; }
+/* 俳句：三行錯落，像散書（散らし書き），一行比一行低 */
+.haiku {
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  gap: .5em;
+  color: var(--ink-soft);
+  letter-spacing: .22em;
+  line-height: 1.9;
+}
+.haiku span:nth-child(2) { padding-top: 1.6em; }
+.haiku span:nth-child(3) { padding-top: 3.2em; }
+.mast-seal { align-self: flex-end; font-size: .55em; }
 
 .seal {
   display: inline-block;

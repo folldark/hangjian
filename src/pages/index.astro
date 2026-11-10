@@ -9,7 +9,12 @@ const poems = (await getCollection("poems")).sort((a, b) => +b.data.date - +a.da
   <div class="view">
     <section class="mast">
       <h1 class="site">行間</h1>
-      <p class="tag">把句子立起來<br />由右而左<br />慢慢讀<span class="seal">行<br />間</span></p>
+      <p class="haiku" aria-label="荒地無人鋤，風送來的都長著，該枯便枯了">
+        <span>荒地無人鋤</span>
+        <span>風送來的都長著</span>
+        <span>該枯便枯了</span>
+      </p>
+      <span class="seal mast-seal">行<br />間</span>
     </section>
 
     {poems.length > 0 ? (
