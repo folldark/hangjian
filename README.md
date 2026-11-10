@@ -10,7 +10,7 @@ Obsidian（手機或電腦）
   寫完把 publish: false 改成 true
         |
         v
-npm run publish-poems      （在這個 repo 裡執行）
+poem-publish               （任何目錄都可以；等同在 repo 裡 npm run publish-poems）
   只複製 publish: true 的詩 → src/content/poems/ → commit → push
         |
         v
@@ -47,6 +47,7 @@ aliases: []
 | 指令 | 用途 |
 |---|---|
 | `npm run publish-poems` | 從 vault 發布（commit＋push） |
+| `poem-publish [參數]` | 同上，任何目錄可用；`~/.local/bin/poem-publish` 由 chezmoi 建立 symlink 指向 `bin/poem-publish` |
 | `npm run publish-poems -- --dry-run` | 只列出會新增／更新／下架哪些詩 |
 | `npm run demo` | 用 `examples/` 的範例詩在本機預覽版面 |
 | `npm run dev` | 用目前已發布的詩在本機預覽 |
