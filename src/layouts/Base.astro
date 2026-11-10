@@ -1,0 +1,64 @@
+---
+import "../styles/global.css";
+import { url } from "../lib/util";
+
+interface Props { title: string; description?: string }
+const { title, description = "行間：直式書寫的短詩。" } = Astro.props;
+---
+<!doctype html>
+<html lang="zh-Hant-TW">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+    <title>{title}</title>
+    <meta name="description" content={description} />
+    <meta property="og:title" content={title} />
+    <meta property="og:description" content={description} />
+    <link rel="icon" href={url() + "favicon.svg"} type="image/svg+xml" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Serif+TC:wght@400;600&display=swap" />
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=LXGW+WenKai+TC:wght@400;700&display=swap" />
+  </head>
+  <body>
+    <main class="scroller" id="scroller" tabindex="-1">
+      <slot />
+    </main>
+    <div class="hint" id="hint">滾輪或滑動，往左讀 ←</div>
+
+    <script>
+      const scroller = document.getElementById("scroller")!;
+      const hint = document.getElementById("hint")!;
+
+      function updateHint() {
+        const overflow = scroller.scrollWidth > scroller.clientWidth + 4;
+        const moved = Math.abs(scroller.scrollLeft) > 24;
+        hint.classList.toggle("gone", !overflow || moved);
+      }
+
+      // 滑鼠滾輪的上下，轉成直書的左右
+      scroller.addEventListener("wheel", (e) => {
+        if (Math.abs(e.deltaY) <= Math.abs(e.deltaX)) return;
+        if (scroller.scrollWidth <= scroller.clientWidth) return;
+        e.preventDefault();
+        scroller.scrollBy({ left: -e.deltaY });
+      }, { passive: false });
+
+      document.addEventListener("keydown", (e) => {
+        const step = scroller.clientWidth * 0.8;
+        if (["ArrowDown", "PageDown", " "].includes(e.key)) {
+          e.preventDefault();
+          scroller.scrollBy({ left: -step, behavior: "smooth" });
+        } else if (["ArrowUp", "PageUp"].includes(e.key)) {
+          e.preventDefault();
+          scroller.scrollBy({ left: step, behavior: "smooth" });
+        }
+      });
+
+      scroller.addEventListener("scroll", updateHint, { passive: true });
+      window.addEventListener("resize", updateHint);
+      document.fonts?.ready.then(updateHint);
+      updateHint();
+    </script>
+  </body>
+</html>

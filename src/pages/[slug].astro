@@ -1,0 +1,39 @@
+---
+import { getCollection } from "astro:content";
+import Base from "../layouts/Base.astro";
+import { dateHTML, url, lines } from "../lib/util";
+
+export async function getStaticPaths() {
+  const poems = (await getCollection("poems")).sort((a, b) => +b.data.date - +a.data.date);
+  return poems.map((poem, i) => ({
+    params: { slug: poem.id },
+    props: { poem, newer: poems[i - 1], older: poems[i + 1] },
+  }));
+}
+
+const { poem, newer, older } = Astro.props;
+const body = lines(poem.body);
+const first = body.find((l) => l) ?? "";
+---
+<Base title={`${poem.data.title}｜行間`} description={first}>
+  <article class="view">
+    <header class="ph">
+      <h1>{poem.data.title}<span class="seal">行<br />間</span></h1>
+      <p class="d" set:html={dateHTML(poem.data.date)} />
+    </header>
+
+    <div class="body">
+      {body.map((l, k) =>
+        l === ""
+          ? <span class="ln gap" />
+          : <span class="ln" style={`animation-delay:${(0.15 + k * 0.12).toFixed(2)}s`}>{l}</span>
+      )}
+    </div>
+
+    <nav class="pn" aria-label="翻頁">
+      {older && <a href={url(older.id)}>前一首　{older.data.title}</a>}
+      {newer && <a href={url(newer.id)}>後一首　{newer.data.title}</a>}
+      <a class="home" href={url()}>回目錄</a>
+    </nav>
+  </article>
+</Base>

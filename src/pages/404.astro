@@ -1,0 +1,11 @@
+---
+import Base from "../layouts/Base.astro";
+import { url } from "../lib/util";
+---
+<Base title="找不到這一頁｜行間">
+  <div class="view">
+    <header class="ph"><h1>此處無詩</h1></header>
+    <div class="body"><span class="ln">這一頁不在了</span><span class="ln">也許從來沒有寫下</span></div>
+    <nav class="pn"><a class="home" href={url()}>回目錄</a></nav>
+  </div>
+</Base>

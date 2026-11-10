@@ -1,0 +1,154 @@
+/* 版面概念：整頁是一條由右往左展開的直行卷軸，標題像書名頁，詩一行一柱 */
+:root {
+  --paper: #ECEEE8;      /* 竹紙，微冷的灰綠 */
+  --ink: #1E2320;        /* 墨 */
+  --ink-soft: #5F675F;   /* 淡墨 */
+  --rule: #C7CCC2;       /* 界欄 */
+  --seal: #A8352B;       /* 朱印 */
+  --seal-ink: #F3F2EC;
+
+  --font-display: "LXGW WenKai TC", "Kaiti TC", "BiauKai", serif;
+  --font-body: "Noto Serif TC", "Songti TC", "PMingLiU", serif;
+
+  --fs: clamp(18px, 3.3vh, 28px);
+  color-scheme: light;
+}
+@media (prefers-color-scheme: dark) {
+  :root {
+    --paper: #141716; --ink: #DADBD3; --ink-soft: #8C948B; --rule: #2C322E;
+    --seal: #C4533F; --seal-ink: #141716; color-scheme: dark;
+  }
+}
+
+html, body { height: 100%; }
+body {
+  margin: 0;
+  background: var(--paper);
+  color: var(--ink);
+  font-family: var(--font-body);
+  overflow: hidden;
+  -webkit-font-smoothing: antialiased;
+}
+
+/* 卷軸本體：直書由右至左，水平捲動 */
+.scroller {
+  width: 100%;          /* 直書容器在橫書頁面裡，寬度不設會被內容撐開 */
+  height: 100%;
+  box-sizing: border-box;
+  writing-mode: vertical-rl;
+  overflow-x: auto;
+  overflow-y: hidden;
+  padding-top: max(clamp(28px, 8vh, 96px), env(safe-area-inset-top, 0px));
+  padding-bottom: calc(clamp(56px, 10vh, 112px) + env(safe-area-inset-bottom, 0px));
+  padding-left: max(16px, env(safe-area-inset-left, 0px));
+  padding-right: max(16px, env(safe-area-inset-right, 0px));
+  scrollbar-width: thin;
+  scrollbar-color: var(--rule) transparent;
+}
+.scroller:focus-visible { outline: none; }
+
+.view {
+  display: flex;
+  flex-direction: column;            /* 直書下，column 就是由右往左 */
+  gap: clamp(40px, 7vw, 104px);
+  padding-right: clamp(8px, 4vw, 64px);
+}
+.view::after { content: ""; display: block; inline-size: 1px; block-size: clamp(24px, 6vw, 80px); flex: none; }
+
+a { color: inherit; text-decoration: none; }
+a:focus-visible { outline: 2px solid var(--seal); outline-offset: 4px; border-radius: 2px; }
+
+.tcy { text-combine-upright: all; }
+
+/* 書名頁 */
+.mast { display: flex; flex-direction: column; gap: 1.2em; font-size: var(--fs); }
+.site {
+  margin: 0;
+  font-family: var(--font-display);
+  font-weight: 700;
+  font-size: calc(var(--fs) * 2.6);
+  letter-spacing: .35em;
+  line-height: 1;
+}
+.tag { margin: 0; color: var(--ink-soft); letter-spacing: .12em; line-height: 1.9; }
+.tag .seal { margin-block-start: 1.4em; }
+
+.seal {
+  display: inline-block;
+  font-family: var(--font-display);
+  font-weight: 700;
+  font-size: .62em;
+  line-height: 1.05;
+  padding: .32em .22em;
+  background: var(--seal);
+  color: var(--seal-ink);
+  border-radius: 2px;
+  letter-spacing: 0;
+  vertical-align: middle;
+}
+
+/* 目錄 */
+.toc { display: flex; flex-direction: column; font-size: var(--fs); border-right: 1px solid var(--rule); }
+.toc a {
+  display: flex;
+  flex-direction: column;
+  gap: .5em;
+  padding: 0 1.1em;
+  border-left: 1px solid var(--rule);
+  transition: background-color .25s ease;
+}
+.toc a:hover { background: color-mix(in srgb, var(--rule) 35%, transparent); }
+.toc a:hover .t { color: var(--seal); }
+.toc .t {
+  font-family: var(--font-display);
+  font-size: 1.45em;
+  letter-spacing: .25em;
+  line-height: 1.5;
+  transition: color .25s ease;
+}
+.toc .d { font-size: .6em; color: var(--ink-soft); letter-spacing: .15em; line-height: 1.8; }
+.toc .f { font-size: .85em; color: var(--ink-soft); letter-spacing: .1em; line-height: 1.9; margin-block-start: 1.6em; }
+
+.empty { margin: 0; font-size: var(--fs); color: var(--ink-soft); letter-spacing: .2em; }
+.colophon { font-size: calc(var(--fs) * .62); color: var(--ink-soft); letter-spacing: .18em; line-height: 2.1; margin: 0; }
+
+/* 單首詩 */
+.ph { display: flex; flex-direction: column; gap: .7em; font-size: var(--fs); }
+.ph h1 {
+  margin: 0;
+  font-family: var(--font-display);
+  font-weight: 700;
+  font-size: 1.9em;
+  letter-spacing: .3em;
+  line-height: 1.2;
+}
+.ph h1 .seal { margin-block-start: .9em; font-size: .4em; }
+.ph .d { margin: 0; font-size: .62em; color: var(--ink-soft); letter-spacing: .15em; line-height: 1.8; }
+
+.body { font-size: var(--fs); line-height: 2.25; letter-spacing: .1em; margin-block-start: 1.2em; }
+.ln { display: block; animation: ink .9s ease both; }
+.ln.gap { inline-size: 1.1em; }
+@keyframes ink { from { opacity: 0; filter: blur(2px); } to { opacity: 1; filter: none; } }
+
+.pn { display: flex; flex-direction: column; gap: 1.6em; font-size: calc(var(--fs) * .7); color: var(--ink-soft); letter-spacing: .2em; }
+.pn a { border-left: 1px solid transparent; transition: color .2s ease, border-color .2s ease; }
+.pn a:hover { color: var(--seal); border-left-color: var(--seal); }
+.pn .home { margin-block-start: auto; }
+
+/* 捲動提示（橫書） */
+.hint {
+  position: fixed;
+  left: max(16px, env(safe-area-inset-left, 0px));
+  bottom: calc(14px + env(safe-area-inset-bottom, 0px));
+  font-size: 13px;
+  color: var(--ink-soft);
+  letter-spacing: .12em;
+  transition: opacity .6s ease;
+  pointer-events: none;
+}
+.hint.gone { opacity: 0; }
+
+@media (prefers-reduced-motion: reduce) {
+  .ln { animation: none; }
+  * { transition: none !important; }
+}

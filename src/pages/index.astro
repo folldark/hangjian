@@ -1,0 +1,31 @@
+---
+import { getCollection } from "astro:content";
+import Base from "../layouts/Base.astro";
+import { dateHTML, url, lines } from "../lib/util";
+
+const poems = (await getCollection("poems")).sort((a, b) => +b.data.date - +a.data.date);
+---
+<Base title="行間">
+  <div class="view">
+    <section class="mast">
+      <h1 class="site">行間</h1>
+      <p class="tag">把句子立起來<br />由右而左<br />慢慢讀<span class="seal">行<br />間</span></p>
+    </section>
+
+    {poems.length > 0 ? (
+      <nav class="toc" aria-label="詩作目錄">
+        {poems.map((p) => (
+          <a href={url(p.id)}>
+            <span class="t">{p.data.title}</span>
+            <span class="d" set:html={dateHTML(p.data.date)} />
+            <span class="f">{lines(p.body).find((l) => l)}</span>
+          </a>
+        ))}
+      </nav>
+    ) : (
+      <p class="empty">詩還在路上</p>
+    )}
+
+    <p class="colophon">共收<span class="tcy">{poems.length}</span>首<br />內文　思源宋體<br />標題　霞鶩文楷</p>
+  </div>
+</Base>

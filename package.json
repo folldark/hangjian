@@ -1,0 +1,15 @@
+{
+  "name": "poem-webpage",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "astro dev",
+    "build": "astro build",
+    "preview": "astro preview",
+    "publish-poems": "node scripts/publish.mjs",
+    "demo": "node scripts/publish.mjs --source examples --no-git --out .demo-content && POEM_CONTENT=.demo-content astro dev"
+  },
+  "dependencies": {
+    "astro": "7.4.2"
+  }
+}

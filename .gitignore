@@ -1,0 +1,5 @@
+node_modules/
+dist/
+.astro/
+.demo-content/
+.DS_Store
