@@ -1,0 +1,9 @@
+#!/bin/bash
+# poem-publish：在任何目錄都能發布行間的詩（vault 3_areas/詩 → GitHub Pages）。
+# ~/.local/bin/poem-publish 是指向本檔的 symlink（chezmoi 管理），要先解開 symlink 才找得到 repo。
+# 參數原樣交給 scripts/publish.mjs，例如：poem-publish --dry-run
+set -euo pipefail
+script="$(readlink -f "${BASH_SOURCE[0]}")"
+repo="$(cd "$(dirname "$script")/.." && pwd)"
+export PATH="/opt/homebrew/bin:$PATH"
+exec node "$repo/scripts/publish.mjs" "$@"
